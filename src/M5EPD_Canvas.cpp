@@ -1,5 +1,5 @@
 #include "M5EPD_Canvas.h"
-
+#include <Wifi.h>
 #include <HTTPClient.h>
 
 M5EPD_Canvas::M5EPD_Canvas(M5EPD_Driver *driver) : TFT_eSprite(NULL) {
@@ -776,7 +776,7 @@ typedef struct {
     uint16_t outHeight;
 } jpg_file_decoder_t;
 
-static uint32_t jpgReadFile(JDEC *decoder, uint8_t *buf, uint32_t len) {
+static UINT jpgReadFile(JDEC *decoder, BYTE *buf, UINT len) {
     jpg_file_decoder_t *jpeg = (jpg_file_decoder_t *)decoder->device;
     File *file               = (File *)jpeg->src;
     if (buf) {
@@ -787,7 +787,7 @@ static uint32_t jpgReadFile(JDEC *decoder, uint8_t *buf, uint32_t len) {
     return len;
 }
 
-static uint32_t jpgRead(JDEC *decoder, uint8_t *buf, uint32_t len) {
+static UINT jpgRead(JDEC *decoder, BYTE *buf, UINT len) {
     jpg_file_decoder_t *jpeg = (jpg_file_decoder_t *)decoder->device;
     if (buf) {
         memcpy(buf, (const uint8_t *)jpeg->src + jpeg->index, len);
@@ -796,7 +796,7 @@ static uint32_t jpgRead(JDEC *decoder, uint8_t *buf, uint32_t len) {
     return len;
 }
 
-static uint32_t jpgWrite(JDEC *decoder, void *bitmap, JRECT *rect) {
+static UINT jpgWrite(JDEC *decoder, void *bitmap, JRECT *rect) {
     jpg_file_decoder_t *jpeg = (jpg_file_decoder_t *)decoder->device;
     uint16_t x               = rect->left;
     uint16_t y               = rect->top;
@@ -857,7 +857,7 @@ static uint32_t jpgWrite(JDEC *decoder, void *bitmap, JRECT *rect) {
 }
 
 static bool jpgDecode(jpg_file_decoder_t *jpeg,
-                      uint32_t (*reader)(JDEC *, uint8_t *, uint32_t)) {
+                      UINT (*reader)(JDEC *, BYTE *, UINT)) {
     static uint8_t work[3100];
     JDEC decoder;
 
