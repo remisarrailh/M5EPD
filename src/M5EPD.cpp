@@ -3,7 +3,7 @@
 #include "driver/adc.h"
 #include "soc/adc_channel.h"
 
-#define BAT_ADC_CHANNEL   ADC1_GPIO35_CHANNEL
+#define BAT_ADC_CHANNEL   (adc1_channel_t)ADC1_GPIO35_CHANNEL
 #define BASE_VOLATAGE     3600
 #define SCALE_INV         2
 #define ADC_FILTER_SAMPLE 8
@@ -76,10 +76,10 @@ void M5EPD::BatteryADCBegin() {
     }
     _is_adc_start = true;
     adc1_config_width(ADC_WIDTH_BIT_12);
-    adc1_config_channel_atten(BAT_ADC_CHANNEL, ADC_ATTEN_DB_11);
+    adc1_config_channel_atten(BAT_ADC_CHANNEL, ADC_ATTEN_DB_12);
     _adc_chars = (esp_adc_cal_characteristics_t *)calloc(
         1, sizeof(esp_adc_cal_characteristics_t));
-    esp_adc_cal_characterize(ADC_UNIT_1, ADC_ATTEN_DB_11, ADC_WIDTH_BIT_12,
+    esp_adc_cal_characterize(ADC_UNIT_1, ADC_ATTEN_DB_12, ADC_WIDTH_BIT_12,
                              BASE_VOLATAGE, _adc_chars);
 }
 
